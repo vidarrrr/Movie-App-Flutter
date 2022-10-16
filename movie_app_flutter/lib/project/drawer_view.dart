@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app_flutter/common/padding.dart';
 import 'package:movie_app_flutter/common/text_style.dart';
 
 class DrawerView extends StatefulWidget {
-  const DrawerView({super.key, required this.watchList});
+  const DrawerView(
+      {super.key, required this.watchList, required this.onClickTitle});
 
   final List<String> watchList;
+  final Function(String) onClickTitle;
   @override
   State<DrawerView> createState() => _DrawerViewState();
 }
@@ -28,17 +31,24 @@ class _DrawerViewState extends State<DrawerView> {
             ),
           ),
           //https://stackoverflow.com/questions/52801075/add-listwidget-to-listview-children-dynamically
-          ..._buildItems()
+          ..._buildItems(widget.onClickTitle)
         ],
       ),
     );
   }
 
-  List<Widget> _buildItems() {
+  List<Widget> _buildItems(Function(String name) onClickTitle) {
     List<Widget> widgetList = [];
     for (String name in widget.watchList) {
       widgetList.add(ListTile(
-        title: Text(name),
+        title: InkWell(
+            onTap: () {
+              onClickTitle(name);
+            },
+            child: Padding(
+              padding: PaddingHelper().getPaddingOnlyTopAndBottom(),
+              child: Text(name),
+            )),
       ));
     }
     return widgetList;

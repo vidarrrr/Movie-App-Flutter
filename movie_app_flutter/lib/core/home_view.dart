@@ -12,6 +12,7 @@ import 'package:movie_app_flutter/project/menu_search_view.dart';
 import '../data/source/local/shared_prefs.dart';
 import '../data/source/remote/service/dio_service.dart';
 import '../model/movie_model.dart';
+import 'detail_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -232,10 +233,29 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Scaffold buildScaffold(BuildContext context) {
+    const movieNotFound = "Movie is not found in current list";
     return Scaffold(
       key: _key,
       drawerEnableOpenDragGesture: false,
-      drawer: DrawerView(watchList: _watchList),
+      drawer: DrawerView(
+        watchList: _watchList,
+        onClickTitle: (text) {
+          var list = _movieModelsBackUp
+              ?.where((element) =>
+                  element.title?.toLowerCase() == text.toLowerCase())
+              .toList();
+
+          if (list != null && list.isNotEmpty) {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) {
+                return DetailView(movieModel: list[0]);
+              },
+            ));
+          } else {
+            toastError(movieNotFound);
+          }
+        },
+      ),
       //https://stackoverflow.com/questions/46551268/when-the-keyboard-appears-the-flutter-widgets-resize-how-to-prevent-this
       resizeToAvoidBottomInset: false,
       body: ListView(children: [

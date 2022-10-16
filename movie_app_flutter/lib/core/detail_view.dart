@@ -32,7 +32,9 @@ class _DetailViewState extends State<DetailView> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      key: _scaffoldKey,
       //the keyboard overflows when opened, so it is applied
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
@@ -89,7 +91,7 @@ class _DetailViewState extends State<DetailView> {
     return Padding(
       padding: PaddingHelper().getPaddingOnlyLeft(16),
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.2,
+        height: MediaQuery.of(context).size.height * 0.25,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: widget.movieModel.actors?.length ?? 0,
